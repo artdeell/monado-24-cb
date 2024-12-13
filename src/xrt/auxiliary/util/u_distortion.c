@@ -55,6 +55,8 @@ u_distortion_cardboard_calculate(const struct u_cardboard_distortion_arguments *
 	// Copy the arguments.
 	out_dist->args = *args;
 
+    float one_over_viewcount = 1.0f / view_count;
+
 	// Save the results.
 	for (uint32_t i = 0; i < view_count; ++i) {
 		parts->views[i].viewport.x_pixels = 0 + i * w_pixels;
@@ -75,14 +77,14 @@ u_distortion_cardboard_calculate(const struct u_cardboard_distortion_arguments *
 		values->screen.size.x = args->screen.w_meters;
 		values->screen.size.y = args->screen.h_meters;
 		values->screen.offset.x =
-		    (args->screen.w_meters + pow(-1, i + 1) * args->inter_lens_distance_meters) / view_count;
+		    (args->screen.w_meters + pow(-1, i) * args->inter_lens_distance_meters * one_over_viewcount) / view_count;
 		values->screen.offset.y = args->lens_y_center_on_screen_meters;
 		// clang-format on
 
 		// Turn into tanangles
-		values->screen.size.x /= args->screen_to_lens_distance_meters;
+		values->screen.size.x /= args->screen_to_lens_distance_meters * view_count;
 		values->screen.size.y /= args->screen_to_lens_distance_meters;
-		values->screen.offset.x /= args->screen_to_lens_distance_meters;
+		values->screen.offset.x /= args->screen_to_lens_distance_meters * view_count;
 		values->screen.offset.y /= args->screen_to_lens_distance_meters;
 
 		// Tanangle to texture coordinates
@@ -92,8 +94,8 @@ u_distortion_cardboard_calculate(const struct u_cardboard_distortion_arguments *
 		values->texture.offset.y = tanf(-args->fov.angle_down);
 
 		// Fix up views not covering the entire screen.
-		values->screen.size.x /= view_count;
-		values->screen.offset.x -= values->screen.size.x * i;
+		//values->screen.size.x /= view_count;
+		//values->screen.offset.x -= values->screen.size.x * i;
 	}
 }
 
@@ -155,7 +157,7 @@ u_cardboard_distortion_arguments_read(const char *proto_file, struct u_cardboard
 		                            .angle_up = XR_DEG_TO_RAD(device_fov[3])};
 #undef XR_DEG_TO_RAD
 		out_dist->fov = fov;
-		U_LOG_I("Successfully loaded calibration: vendor: \"%s\" model: \"%s\"",
+		U_LOG_E("Successfully loaded calibration: vendor: \"%s\" model: \"%s\"",
 		        msg.has_vendor ? msg.vendor : "Unknown", msg.has_model ? msg.model : "Unknown");
 	} else
 		U_LOG_E("Failed to load calibration file: %s", proto_file);
