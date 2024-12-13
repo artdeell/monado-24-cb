@@ -10,20 +10,20 @@
 #include "util/u_logging.h"
 
 #include "wrap/android.os.h"
+#include "wrap/android.content.h"
 #include "wrap/java.io.h"
 
 #include <string>
 #include <stdexcept>
 
 
-bool
-android_enviroment_get_external_storage_dir(char *str, size_t size)
+bool android_environment_get_files_dir(void* context, char *str, size_t size)
 {
 	try {
 		if (size == 0 || str == nullptr) {
 			throw std::invalid_argument("Dst string is null or zero buffer size");
 		}
-		wrap::java::io::File file = wrap::android::os::Environment::getExternalStorageDirectory();
+		wrap::java::io::File file = wrap::android::content::Context{(jobject)context}.getFilesDir();
 		if (file.isNull()) {
 			throw std::runtime_error("Failed to get File object");
 		}

@@ -18,7 +18,7 @@ extern "C" {
 #endif
 
 bool
-android_enviroment_get_external_storage_dir(char *str, size_t size);
+android_environment_get_files_dir(void* context, char *str, size_t size);
 
 
 #ifdef __cplusplus

@@ -22,6 +22,8 @@ Context::Meta::Meta(bool deferDrop)
           classRef().getMethod("getClassLoader", "()Ljava/lang/ClassLoader;")),
       getExternalFilesDir(classRef().getMethod(
           "getExternalFilesDir", "(Ljava/lang/String;)Ljava/io/File;")),
+      getFilesDir(classRef().getMethod(
+              "getFilesDir", "()Ljava/io/File;")),
       startActivity(
           classRef().getMethod("startActivity", "(Landroid/content/Intent;)V")),
       startActivity1(classRef().getMethod(

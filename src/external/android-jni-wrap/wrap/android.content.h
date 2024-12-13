@@ -147,6 +147,18 @@ class Context : public ObjectWrapperBase {
      */
     java::io::File getExternalFilesDir(std::string const &type);
 
+
+    /*!
+     * Wrapper for the getFilesDir method
+     *
+     * Java prototype:
+     * `public abstract java.io.File getFilesDir();`
+     *
+     * JNI signature: ()Ljava/io/File;
+     *
+     */
+    java::io::File getFilesDir();
+
     /*!
      * Wrapper for the startActivity method
      *
@@ -223,6 +235,7 @@ class Context : public ObjectWrapperBase {
         jni::method_t getApplicationContext;
         jni::method_t getClassLoader;
         jni::method_t getExternalFilesDir;
+        jni::method_t getFilesDir;
         jni::method_t startActivity;
         jni::method_t startActivity1;
         jni::method_t getSystemService;

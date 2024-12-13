@@ -60,6 +60,11 @@ inline java::lang::ClassLoader Context::getClassLoader() {
         object().call<jni::Object>(Meta::data().getClassLoader));
 }
 
+inline java::io::File Context::getFilesDir() {
+    assert(!isNull());
+    return java::io::File(object().call<jni::Object>(Meta::data().getFilesDir));
+}
+
 inline java::io::File Context::getExternalFilesDir(std::string const &type) {
     assert(!isNull());
     return java::io::File(

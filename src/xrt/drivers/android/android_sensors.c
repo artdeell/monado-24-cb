@@ -268,9 +268,9 @@ android_device_create()
 	const float h_meters = ((float)h_pixels / (float)ppi) * 0.0254f;
 
 	char current_device_params_file[255] = {'\0'};
-	if (android_enviroment_get_external_storage_dir(current_device_params_file,
-	                                                sizeof(current_device_params_file))) {
-		strncat(current_device_params_file, "/Cardboard/current_device_params",
+	if (android_environment_get_files_dir(android_globals_get_context(), current_device_params_file,
+                                          sizeof(current_device_params_file))) {
+		strncat(current_device_params_file, "/current_device_params",
 		        sizeof(current_device_params_file));
 	}
 
@@ -295,7 +295,7 @@ android_device_create()
 	        },
 	};
 	if (!u_cardboard_distortion_arguments_read(current_device_params_file, &args)) {
-		U_LOG_W("Failed to load cardboard calibration file, default distoration parameters will be used.");
+		U_LOG_W("Failed to load cardboard calibration file, default distortion parameters will be used.");
 	}
 
 	u_distortion_cardboard_calculate(&args, d->base.hmd, &d->cardboard);
